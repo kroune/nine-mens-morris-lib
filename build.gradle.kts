@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.22"
     id("io.gitlab.arturbosch.detekt") version "1.23.3"
+    `maven-publish`
 }
 
 group = "com.kr8ne.mensMorris"
@@ -22,4 +23,16 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(20)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.kr8ne"
+            artifactId = "nine-mens-morris"
+            version = "1.0.0"
+
+            from(components["java"])
+        }
+    }
 }
