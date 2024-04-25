@@ -3,6 +3,9 @@ package com.kr8ne.mensMorris.cache
 import com.kr8ne.mensMorris.Position
 import com.kr8ne.mensMorris.move.Movement
 
+/**
+ * provides interface for accessing cache functions
+ */
 data object Cache : CacheI {
     /**
      * we store occurred positions here which massively increases speed
@@ -34,6 +37,10 @@ data object Cache : CacheI {
         occurredPositions.clear()
     }
 
+    /**
+     * gets size of occurred positions
+     * Tests only
+     */
     fun size(): Int {
         return occurredPositions.size
     }
