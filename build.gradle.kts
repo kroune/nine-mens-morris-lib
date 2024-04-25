@@ -21,8 +21,9 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
 }
+
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(8)
 }
 
 publishing {

@@ -406,7 +406,6 @@ class Position(
      * this "hash" function has no collisions
      * each result is 31 symbols long
      * TODO: try to compress it
-     * TODO: rewrite UNIT tests for this
      * (1){pieceToMove}(1){removalCount}(24){positions}(3){freePieces.first}(3){freePieces.second}
      */
     fun longHashCode(): Long {
