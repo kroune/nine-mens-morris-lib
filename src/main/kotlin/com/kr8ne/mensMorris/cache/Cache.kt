@@ -3,7 +3,7 @@ package com.kr8ne.mensMorris.cache
 import com.kr8ne.mensMorris.Position
 import com.kr8ne.mensMorris.move.Movement
 
-internal data object Cache : CacheI {
+data object Cache : CacheI {
     /**
      * we store occurred positions here which massively increases speed
      */
