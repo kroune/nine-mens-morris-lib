@@ -406,6 +406,11 @@ class Position(
     /**
      * used for caching, replaces hashcode
      * this "hash" function has no collisions
+     *
+     * basically it works in the ternary number system
+     * since most of the values have 3 different possible states
+     * (like piece can be null/true/false)
+     *
      * each result is 31 symbols long
      * (1){pieceToMove}(1){removalCount}(24){positions}(3){freePieces.first}(3){freePieces.second}
      */
