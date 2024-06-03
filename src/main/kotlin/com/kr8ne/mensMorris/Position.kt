@@ -213,7 +213,7 @@ class Position(
     /**
      * @return possible movements
      */
-    fun generateMoves(currentDepth: UByte, ignoreCache: Boolean = false): List<Movement> {
+    fun generateMoves(currentDepth: UByte = UByte.MAX_VALUE, ignoreCache: Boolean = false): List<Movement> {
         if (!ignoreCache) {
             // check if we can abort calculation / use our previous result
             val cache = Cache.getCache(this, currentDepth)
