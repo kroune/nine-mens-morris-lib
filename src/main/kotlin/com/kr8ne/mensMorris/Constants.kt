@@ -37,17 +37,17 @@ const val PIECES_TO_FLY: UByte = 3U
 const val LOST_GAME_COST = -2_147_483_648 + 1_000_000
 
 /**
- * fast way for creating green piece
+ * fast, readable way for creating green piece
  */
 const val GREEN = true
 
 /**
- * fast way for creating blue piece
+ * fast, readable way for creating blue piece
  */
 const val BLUE_ = false
 
 /**
- * fast way for creating empty piece
+ * fast, readable way for creating empty piece
  */
 inline val EMPTY: Boolean? get() = null
 
@@ -55,17 +55,20 @@ inline val EMPTY: Boolean? get() = null
  * a default game start position
  */
 @Suppress("unused")
-val gameStartPosition = Position(
-    // @formatter:off
-    arrayOf(
-        EMPTY,                  EMPTY,                  EMPTY,
-                EMPTY,          EMPTY,          EMPTY,
-                        EMPTY,  EMPTY,  EMPTY,
-        EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
-                        EMPTY,  EMPTY,  EMPTY,
-                EMPTY,          EMPTY,          EMPTY,
-        EMPTY,                  EMPTY,                  EMPTY
-    ),
-    // @formatter:on
-    Pair(6u, 6u), pieceToMove = true
-)
+val gameStartPosition: Position
+    get() {
+        return Position(
+            // @formatter:off
+            arrayOf(
+                EMPTY,                  EMPTY,                  EMPTY,
+                        EMPTY,          EMPTY,          EMPTY,
+                                EMPTY,  EMPTY,  EMPTY,
+                EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
+                                EMPTY,  EMPTY,  EMPTY,
+                        EMPTY,          EMPTY,          EMPTY,
+                EMPTY,                  EMPTY,                  EMPTY
+            ),
+            // @formatter:on
+            Pair(6u, 6u), pieceToMove = true
+        )
+    }

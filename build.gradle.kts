@@ -1,10 +1,11 @@
 plugins {
     kotlin("jvm") version "1.9.22"
     id("io.gitlab.arturbosch.detekt") version "1.23.3"
+    kotlin("plugin.serialization") version "2.0.0"
     `maven-publish`
 }
 
-group = "com.kr8ne.mensMorris"
+group = "com.kroune.mensMorris"
 version = "1.0"
 
 repositories {
@@ -12,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
@@ -29,7 +31,7 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.kr8ne"
+            groupId = "com.kroune"
             artifactId = "nine-mens-morris"
             version = "1.0.0"
 

@@ -5,6 +5,7 @@ import com.kr8ne.mensMorris.move.Movement
 import com.kr8ne.mensMorris.move.moveProvider
 import com.kr8ne.mensMorris.move.removeChecker
 import com.kr8ne.mensMorris.move.triplesMap
+import kotlinx.serialization.Serializable
 
 /**
  * used for storing position data
@@ -20,19 +21,20 @@ import com.kr8ne.mensMorris.move.triplesMap
  * @see longHashCode
  */
 @Suppress("EqualsOrHashCode")
+@Serializable
 class Position(
-    override var positions: Array<Boolean?>,
-    override var freePieces: Pair<UByte, UByte> = Pair(0U, 0U),
+    var positions: Array<Boolean?>,
+    var freePieces: Pair<UByte, UByte> = Pair(0U, 0U),
     var greenPiecesAmount: UByte = ((positions.count { it == true }.toUByte() + freePieces.first).toUByte()),
     var bluePiecesAmount: UByte = (positions.count { it == false }.toUByte() + freePieces.second).toUByte(),
-    override var pieceToMove: Boolean,
-    override var removalCount: Byte = 0
-) : PositionI {
+    var pieceToMove: Boolean,
+    var removalCount: Byte = 0
+) {
     /**
      * evaluates position
      * @return pair, where first is eval. for green and the second one for blue
      */
-    override fun evaluate(depth: UByte): Pair<Int, Int> {
+    fun evaluate(depth: UByte): Pair<Int, Int> {
         if (greenPiecesAmount < PIECES_TO_FLY) {
             val depthCost = depth.toInt() * DEPTH_COST
             return Pair(LOST_GAME_COST + depthCost, Int.MAX_VALUE - depthCost)
@@ -124,7 +126,7 @@ class Position(
      * @color color of the piece we are finding a move for
      * @return possible positions and there evaluation
      */
-    override fun solve(
+    fun solve(
         depth: UByte
     ): Pair<Pair<Int, Int>, MutableList<Movement>> {
         if (depth == 0.toUByte() || gameEnded()) {
@@ -185,7 +187,7 @@ class Position(
     /**
      * @return a copy of the current position
      */
-    override fun copy(): Position {
+    fun copy(): Position {
         return Position(
             positions.clone(),
             freePieces,
@@ -211,7 +213,7 @@ class Position(
     /**
      * @return possible movements
      */
-    override fun generateMoves(currentDepth: UByte, ignoreCache: Boolean): List<Movement> {
+    fun generateMoves(currentDepth: UByte, ignoreCache: Boolean = false): List<Movement> {
         if (!ignoreCache) {
             // check if we can abort calculation / use our previous result
             val cache = Cache.getCache(this, currentDepth)
@@ -304,7 +306,7 @@ class Position(
     /**
      * @return state of the game
      */
-    override fun gameState(): GameState {
+    fun gameState(): GameState {
         return when {
             (gameEnded()) -> {
                 GameState.End
@@ -405,7 +407,6 @@ class Position(
      * used for caching, replaces hashcode
      * this "hash" function has no collisions
      * each result is 31 symbols long
-     * TODO: try to compress it
      * (1){pieceToMove}(1){removalCount}(24){positions}(3){freePieces.first}(3){freePieces.second}
      */
     fun longHashCode(): Long {
