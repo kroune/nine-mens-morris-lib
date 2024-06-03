@@ -34,7 +34,7 @@ class Position(
      * evaluates position
      * @return pair, where first is eval. for green and the second one for blue
      */
-    fun evaluate(depth: UByte): Pair<Int, Int> {
+    fun evaluate(depth: UByte = 0u): Pair<Int, Int> {
         if (greenPiecesAmount < PIECES_TO_FLY) {
             val depthCost = depth.toInt() * DEPTH_COST
             return Pair(LOST_GAME_COST + depthCost, Int.MAX_VALUE - depthCost)
