@@ -1,6 +1,7 @@
 package com.kr8ne.mensMorris.move
 
 import com.kr8ne.mensMorris.Position
+import kotlinx.serialization.Serializable
 
 /**
  * used to store movement
@@ -8,6 +9,7 @@ import com.kr8ne.mensMorris.Position
  * @param endIndex index of place a piece moves to
  */
 @Suppress("EqualsOrHashCode")
+@Serializable
 class Movement(val startIndex: Int?, val endIndex: Int?) {
     /**
      * @param pos position we have a more for
