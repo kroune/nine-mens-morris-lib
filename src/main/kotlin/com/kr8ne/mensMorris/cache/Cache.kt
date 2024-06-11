@@ -10,7 +10,8 @@ object Cache {
     /**
      * we store occurred positions here which massively increases speed
      */
-    private val occurredPositions: MutableMap<Long, Pair<List<Movement>, UByte>> = mutableMapOf()
+    private val occurredPositions: HashMap<Long, Pair<List<Movement>, UByte>> = hashMapOf()
+
     /**
      * gets a proper response to a cache call
      * @param pos we cash response for

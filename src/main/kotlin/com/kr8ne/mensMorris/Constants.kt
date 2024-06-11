@@ -69,6 +69,6 @@ val gameStartPosition: Position
                 EMPTY,                  EMPTY,                  EMPTY
             ),
             // @formatter:on
-            Pair(6u, 6u), pieceToMove = true
+            Pair(8u, 8u), pieceToMove = true
         )
     }

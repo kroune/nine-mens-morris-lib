@@ -205,7 +205,7 @@ class Position(
     fun removalAmount(move: Movement): Byte {
         if (move.endIndex == null) return 0
 
-        return removeChecker[move.endIndex]!!.count { list ->
+        return removeChecker[move.endIndex].count { list ->
             list.all { positions[it] == pieceToMove }
         }.toByte()
     }
@@ -406,25 +406,37 @@ class Position(
     /**
      * used for caching, replaces hashcode
      * this "hash" function has no collisions
-     * each result is 31 symbols long
-     * (1){pieceToMove}(1){removalCount}(24){positions}(3){freePieces.first}(3){freePieces.second}
+     * each result is <= 14 symbols long
+     * basically we use ternary, since most of the values are have <= 3 different possible value
+     *
+     * even though there is a test for hash collisions it is highly unrecommended to touch this
+     * test can't fully check hash collisions
+     *
+     * so don't touch this unless you fully understand this code
      */
     fun longHashCode(): Long {
         var result = 0L
-        // 3^30 = 205891132094649
-        result += removalCount * 205891132094649
-        //3^29 = 68630377364883
-        var pow329 = 68630377364883
+        //3^28 = 22876792454961
+        result += removalCount * 22876792454961
+        //3^27 = 7625597484987
+        var pow329 = 7625597484987
         positions.forEach {
             result += when (it) {
-                null -> 2
+                null -> 0
                 true -> 1
-                false -> 0
+                false -> 2
             } * pow329
             pow329 /= 3
         }
-        result += freePieces.first.toString(3).toInt() * 9
-        result += freePieces.second.toString(3).toInt() * 1
+        // 3^3 = 27
+        result += (freePieces.first.toInt() / 3 * 27)
+        // 3^2 = 9
+        result += (freePieces.first.toInt() % 3 * 9)
+        // 3^1 = 3
+        result += (freePieces.second.toInt() / 3 * 3)
+        // 3^0 = 1
+        result += (freePieces.second.toInt() % 3)
+        println(result.toString().length)
         if (pieceToMove) {
             result *= -1
         }

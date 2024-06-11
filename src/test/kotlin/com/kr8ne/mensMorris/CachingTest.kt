@@ -62,10 +62,22 @@ class CachingTest : Caching() {
     @Test
     fun `check hash collisions`() {
         val generatedPositions: MutableMap<Position, Long> = mutableMapOf()
-        position.generateMoves(ignoreCache = true).forEach {
-            val pos = it.producePosition(position)
-            generatedPositions[pos] = pos.longHashCode()
+        // we generate different positions and put their hashes into the map
+        val previousStepGeneratedMoves = mutableListOf(position)
+        repeat(5) {
+            // we can't directly add, or [ConcurrentModificationException] will be thrown
+            val previousStepGeneratedMovesCopy = previousStepGeneratedMoves.toMutableList()
+            previousStepGeneratedMoves.clear()
+            previousStepGeneratedMovesCopy.forEach { pos ->
+                pos.generateMoves(ignoreCache = true).forEach {
+                    val newPos = it.producePosition(pos)
+                    previousStepGeneratedMoves.add(newPos)
+                    generatedPositions[newPos] = newPos.longHashCode()
+                }
+            }
         }
+        // if any 2 positions have the same hash, they are equal
+        // (if not - test is failed)
         val usedHashes = mutableMapOf<Long, Position>()
         generatedPositions.forEach {
             if (usedHashes[it.value] != null) {
