@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
  * used for storing position data
  * @param positions all pieces
  * @param freePieces pieces we can still place: first - green, second - blue
- * both should be <= 8
+ * both should be <= 26
  * @see longHashCode
  * @param greenPiecesAmount used for fast evaluation & game state checker (stores green pieces)
  * @param bluePiecesAmount used for fast evaluation & game state checker (stores blue pieces)
@@ -263,7 +263,7 @@ class Position(
         val possibleMove: MutableList<Movement> = mutableListOf()
         positions.forEachIndexed { startIndex, piece ->
             if (piece == pieceToMove) {
-                moveProvider[startIndex]!!.forEach { endIndex ->
+                moveProvider[startIndex].forEach { endIndex ->
                     if (positions[endIndex] == null) {
                         possibleMove.add(Movement(startIndex, endIndex))
                     }
@@ -416,10 +416,25 @@ class Position(
      */
     fun longHashCode(): Long {
         var result = 0L
-        //3^28 = 22876792454961
-        result += removalCount * 22876792454961
-        //3^27 = 7625597484987
-        var pow329 = 7625597484987
+        // 3^30 = 205891132094649
+        result += removalCount * 205891132094649
+
+        // 3^29 = 68630377364883
+        result += (freePieces.first.toInt() / 9 * 68630377364883)
+        // 3^28 = 22876792454961
+        result += (freePieces.first.toInt() / 3 * 22876792454961)
+        // 3^27 = 7625597484987
+        result += (freePieces.first.toInt() % 3 * 7625597484987)
+
+        // 3^26 = 2541865828329
+        result += (freePieces.second.toInt() / 9 * 2541865828329)
+        // 3^25 = 847288609443
+        result += (freePieces.second.toInt() / 3 * 847288609443)
+        // 3^24 = 282429536481
+        result += (freePieces.second.toInt() % 3 * 282429536481)
+
+        // 3^23 = 94143178827
+        var pow329 = 94143178827
         positions.forEach {
             result += when (it) {
                 null -> 0
@@ -428,15 +443,6 @@ class Position(
             } * pow329
             pow329 /= 3
         }
-        // 3^3 = 27
-        result += (freePieces.first.toInt() / 3 * 27)
-        // 3^2 = 9
-        result += (freePieces.first.toInt() % 3 * 9)
-        // 3^1 = 3
-        result += (freePieces.second.toInt() / 3 * 3)
-        // 3^0 = 1
-        result += (freePieces.second.toInt() % 3)
-        println(result.toString().length)
         if (pieceToMove) {
             result *= -1
         }
