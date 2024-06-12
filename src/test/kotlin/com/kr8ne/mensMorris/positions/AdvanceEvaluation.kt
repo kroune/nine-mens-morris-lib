@@ -18,7 +18,7 @@ open class AdvanceEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(7u, 6u), pieceToMove = true
+        7u, 6u, pieceToMove = true
     )
 
 
@@ -34,7 +34,7 @@ open class AdvanceEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(7u, 6u), pieceToMove = true
+        7u, 6u, pieceToMove = true
     )
 
     val blueWinning1 = Position(
@@ -49,7 +49,7 @@ open class AdvanceEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(5u, 5u), pieceToMove = false
+        5u, 5u, pieceToMove = false
     )
 
     val blueWinning2 = Position(
@@ -64,6 +64,6 @@ open class AdvanceEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(5u, 5u), pieceToMove = false
+        5u, 5u, pieceToMove = false
     )
 }

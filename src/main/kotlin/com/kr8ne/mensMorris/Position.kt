@@ -10,23 +10,22 @@ import kotlinx.serialization.Serializable
 /**
  * used for storing position data
  * @param positions all pieces
- * @param freePieces pieces we can still place: first - green, second - blue
- * both should be <= 26
- * @see longHashCode
+ * @param freeGreenPieces green pieces we can still place <= 26
+ * @param freeBluePieces green pieces we can still place <= 26
  * @param greenPiecesAmount used for fast evaluation & game state checker (stores green pieces)
  * @param bluePiecesAmount used for fast evaluation & game state checker (stores blue pieces)
  * @param pieceToMove piece going to move next
- * @param removalCount number of pieces to remove
- * always <= 2
+ * @param removalCount number of pieces to remove <= 2
  * @see longHashCode
  */
-@Suppress("EqualsOrHashCode")
+@Suppress("EqualsOrHashCode", "LongParameterList")
 @Serializable
 class Position(
     var positions: Array<Boolean?>,
-    var freePieces: Pair<UByte, UByte> = Pair(0U, 0U),
-    var greenPiecesAmount: UByte = ((positions.count { it == true }.toUByte() + freePieces.first).toUByte()),
-    var bluePiecesAmount: UByte = (positions.count { it == false }.toUByte() + freePieces.second).toUByte(),
+    var freeGreenPieces: UByte = 0u,
+    var freeBluePieces: UByte = 0u,
+    var greenPiecesAmount: UByte = ((positions.count { it == true }.toUByte() + freeGreenPieces).toUByte()),
+    var bluePiecesAmount: UByte = (positions.count { it == false }.toUByte() + freeBluePieces).toUByte(),
     var pieceToMove: Boolean,
     var removalCount: Byte = 0
 ) {
@@ -49,8 +48,9 @@ class Position(
         val greenPieces = (greenPiecesAmount.toInt() + if (pieceToMove) removalCount.toInt() else 0)
         val bluePieces = (bluePiecesAmount.toInt() + if (!pieceToMove) removalCount.toInt() else 0)
 
-        greenEvaluation += (greenPieces - bluePieces) * PIECE_COST
-        blueEvaluation += (bluePieces - greenPieces) * PIECE_COST
+        val deltaPieces = (greenPieces - bluePieces)
+        greenEvaluation += deltaPieces * PIECE_COST
+        blueEvaluation -= deltaPieces * PIECE_COST
 
         val (unfinishedTriples, findBlockedTriples) = triplesEvaluation()
 
@@ -63,10 +63,9 @@ class Position(
             (unfinishedTriples.second - unfinishedTriples.first * ENEMY_UNFINISHED_TRIPLES_COST)
         blueEvaluation += blueUnfinishedTriplesDelta * UNFINISHED_TRIPLES_COST
 
-        greenEvaluation +=
-            (findBlockedTriples.first - findBlockedTriples.second) * POSSIBLE_TRIPLE_COST
-        blueEvaluation +=
-            (findBlockedTriples.second - findBlockedTriples.first) * POSSIBLE_TRIPLE_COST
+        val deltaBlockedTriples = (findBlockedTriples.first - findBlockedTriples.second) * POSSIBLE_TRIPLE_COST
+        greenEvaluation += deltaBlockedTriples
+        blueEvaluation -= deltaBlockedTriples
 
         return Pair(greenEvaluation, blueEvaluation)
     }
@@ -190,7 +189,8 @@ class Position(
     fun copy(): Position {
         return Position(
             positions.clone(),
-            freePieces,
+            freeGreenPieces,
+            freeBluePieces,
             greenPiecesAmount,
             bluePiecesAmount,
             pieceToMove,
@@ -316,7 +316,7 @@ class Position(
                 GameState.Removing
             }
 
-            ((if (pieceToMove) freePieces.first else freePieces.second) > 0U) -> {
+            ((if (pieceToMove) freeGreenPieces else freeBluePieces) > 0U) -> {
                 GameState.Placement
             }
 
@@ -346,7 +346,7 @@ class Position(
                         _____           _____           _____
                 _____                   _____                   _____
             ),
-            freePieces = Pair(${freePieces.first}u, ${freePieces.second}u),
+            freePieces = Pair(${freeGreenPieces}u, ${freeBluePieces}u),
             pieceToMove = ${pieceToMove},
             removalCount = $removalCount
         )
@@ -376,7 +376,8 @@ class Position(
                 return false
             }
         }
-        return freePieces == other.freePieces && pieceToMove == other.pieceToMove
+        return freeGreenPieces == other.freeGreenPieces && freeBluePieces == other.freeBluePieces
+                && pieceToMove == other.pieceToMove
     }
 
     /**
@@ -420,18 +421,18 @@ class Position(
         result += removalCount * 205891132094649
 
         // 3^29 = 68630377364883
-        result += (freePieces.first.toInt() / 9 * 68630377364883)
+        result += (freeGreenPieces.toInt() / 9 * 68630377364883)
         // 3^28 = 22876792454961
-        result += (freePieces.first.toInt() / 3 * 22876792454961)
+        result += (freeGreenPieces.toInt() / 3 * 22876792454961)
         // 3^27 = 7625597484987
-        result += (freePieces.first.toInt() % 3 * 7625597484987)
+        result += (freeGreenPieces.toInt() % 3 * 7625597484987)
 
         // 3^26 = 2541865828329
-        result += (freePieces.second.toInt() / 9 * 2541865828329)
+        result += (freeBluePieces.toInt() / 9 * 2541865828329)
         // 3^25 = 847288609443
-        result += (freePieces.second.toInt() / 3 * 847288609443)
+        result += (freeBluePieces.toInt() / 3 * 847288609443)
         // 3^24 = 282429536481
-        result += (freePieces.second.toInt() % 3 * 282429536481)
+        result += (freeBluePieces.toInt() % 3 * 282429536481)
 
         // 3^23 = 94143178827
         var pow329 = 94143178827

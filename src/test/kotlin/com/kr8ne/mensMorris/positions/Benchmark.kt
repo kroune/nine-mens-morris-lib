@@ -18,7 +18,7 @@ open class Benchmark {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(5u, 5u), pieceToMove = true
+        5u, 5u, pieceToMove = true
     )
 
     val benchmark2 = Position(
@@ -33,6 +33,6 @@ open class Benchmark {
             EMPTY,                  EMPTY,                  BLUE_
         ),
         // @formatter:on
-        freePieces = Pair(0u, 0u), pieceToMove = true
+        0u, 0u, pieceToMove = true
     )
 }

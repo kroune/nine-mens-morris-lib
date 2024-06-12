@@ -30,16 +30,10 @@ class Movement(val startIndex: Int?, val endIndex: Int?) {
         }
         if (startIndex == null) {
             // this happens when we place smth
-            when (copy.pieceToMove) {
-                true -> {
-                    copy.freePieces =
-                        Pair((copy.freePieces.first - 1u).toUByte(), copy.freePieces.second)
-                }
-
-                false -> {
-                    copy.freePieces =
-                        Pair(copy.freePieces.first, (copy.freePieces.second - 1u).toUByte())
-                }
+            if (copy.pieceToMove) {
+                copy.freeGreenPieces--
+            } else {
+                copy.freeBluePieces--
             }
         } else {
             copy.positions[startIndex] = null

@@ -33,7 +33,7 @@ open class UnfinishedTriplesEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(0u, 1u), pieceToMove = true
+        0u, 1u, pieceToMove = true
     )
 
     val greenWinning2 = Position(

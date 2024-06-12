@@ -33,7 +33,7 @@ open class BasicEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(0u, 1u), pieceToMove = true
+        0u, 1u, pieceToMove = true
     )
 
     val blueWinning3 = Position(
@@ -48,7 +48,7 @@ open class BasicEvaluation {
             EMPTY,                  BLUE_,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(0u, 0u), pieceToMove = true
+        0u, 0u, pieceToMove = true
     )
 
     val blueWinning4 = Position(
@@ -63,7 +63,7 @@ open class BasicEvaluation {
             EMPTY,                  BLUE_,                  EMPTY
         ),
         // @formatter:on
-        freePieces = Pair(0u, 1u), pieceToMove = true
+        0u, 1u, pieceToMove = true
     )
 
     val greenWinning1 = Position(

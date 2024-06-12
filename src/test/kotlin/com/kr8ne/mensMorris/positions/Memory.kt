@@ -18,7 +18,7 @@ open class Memory {
             EMPTY,                  EMPTY,                  GREEN
         ),
         // @formatter:on
-        freePieces = Pair(0u, 1u),
+        0u, 1u,
         pieceToMove = true
     )
 }
