@@ -64,7 +64,7 @@ open class Strategy {
     )
 
     val correctResult3 = Pair(
-        Pair(-1000, 1000), mutableListOf(
+        Pair(-10000, 10000), mutableListOf(
             Movement(null, 0),
             Movement(null, 7)
         )
@@ -91,6 +91,7 @@ open class Strategy {
             Movement(0, 1)
         )
     )
+
     /*
     0-----------------1-----------------2
     |                 |                 |

@@ -3,7 +3,7 @@ package com.kr8ne.mensMorris
 /**
  * pieces cost
  */
-const val PIECE_COST = 1_000
+const val PIECE_COST = 10_000
 
 /**
  * cost of additional moves (unnecessary) in winning positions

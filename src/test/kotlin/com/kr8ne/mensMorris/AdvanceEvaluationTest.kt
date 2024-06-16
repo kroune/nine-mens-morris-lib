@@ -18,11 +18,11 @@ class AdvanceEvaluationTest : AdvanceEvaluation() {
 
     @Test
     fun blueWinning1() {
-        assertEquals(blueWinning1.evaluate(), Pair(-2405, 1605))
+        assertEquals(blueWinning1.evaluate(), Pair(-20405, 19605))
     }
 
     @Test
     fun blueWinning2() {
-        assertEquals(blueWinning2.evaluate(), Pair(-2000, 2000))
+        assertEquals(blueWinning2.evaluate(), Pair(-20000, 20000))
     }
 }

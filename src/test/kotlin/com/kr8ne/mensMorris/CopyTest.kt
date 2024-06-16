@@ -1,6 +1,5 @@
 package com.kr8ne.mensMorris
 
-import com.kr8ne.mensMorris.cache.Cache
 import com.kr8ne.mensMorris.positions.Copy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -26,10 +25,5 @@ class CopyTest : Copy() {
         val positionCopy = position.copy()
         positionCopy.positions[10] = null
         assertNotEquals(position, positionCopy)
-    }
-
-    @AfterEach
-    fun clearCache() {
-        Cache.wipeCache()
     }
 }

@@ -1,6 +1,5 @@
 package com.kr8ne.mensMorris
 
-import com.kr8ne.mensMorris.cache.Cache
 import com.kr8ne.mensMorris.move.Movement
 import com.kr8ne.mensMorris.move.moveProvider
 import com.kr8ne.mensMorris.move.removeChecker
@@ -132,7 +131,18 @@ class Position(
             return Pair(evaluate(depth), mutableListOf())
         }
         // for all possible positions, we try to solve them
-        val positions: MutableList<Pair<Pair<Int, Int>, MutableList<Movement>>> = generatePositionsWithEval(depth)
+        val positions: MutableList<Pair<Pair<Int, Int>, MutableList<Movement>>> = mutableListOf()
+        generateMoves().forEach {
+            val pos = it.producePosition(this)
+            val shouldNotDecreaseDepth = (pos.removalCount > 0 && !gameEnded())
+            val result = pos.solve((depth - if (shouldNotDecreaseDepth) 0u else 1u).toUByte())
+            if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
+                // it means we don't have any valid move, so we lost
+                return@forEach
+            }
+            result.second.add(it)
+            positions.add(result)
+        }
         if (positions.isEmpty()) {
             // if we can't make a move, we lose
             return Pair(
@@ -146,41 +156,6 @@ class Position(
         return positions.maxBy {
             if (pieceToMove) it.first.first else it.first.second
         }
-    }
-
-    /**
-     * generates all positions with corresponding evaluation
-     * @param depth our current depth
-     */
-    private fun generatePositionsWithEval(
-        depth: UByte
-    ): MutableList<Pair<Pair<Int, Int>, MutableList<Movement>>> {
-        val positions: MutableList<Pair<Pair<Int, Int>, MutableList<Movement>>> = mutableListOf()
-        val movesAfterRemoval = mutableListOf<Pair<Movement, Movement>>()
-        generateMoves(depth).forEach {
-            val pos = it.producePosition(this)
-            if (pos.removalCount > 0 && !gameEnded()) {
-                movesAfterRemoval.addAll(
-                    pos.generateRemovalMoves().map { newMove -> Pair(newMove, it) })
-                return@forEach
-            }
-            val result = pos.solve((depth - 1u).toUByte())
-            if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
-                return@forEach
-            }
-            result.second.add(it)
-            positions.add(result)
-        }
-        movesAfterRemoval.forEach { (newMove, oldMove) ->
-            val pos = newMove.producePosition(this)
-            val result = pos.solve((depth - 1u).toUByte())
-            if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
-                return@forEach
-            }
-            result.second.addAll(listOf(newMove, oldMove))
-            positions.add(result)
-        }
-        return positions
     }
 
     /**
@@ -213,13 +188,7 @@ class Position(
     /**
      * @return possible movements
      */
-    fun generateMoves(currentDepth: UByte = UByte.MAX_VALUE, ignoreCache: Boolean = false): List<Movement> {
-        if (!ignoreCache) {
-            // check if we can abort calculation / use our previous result
-            val cache = Cache.getCache(this, currentDepth)
-            if (cache != null)
-                return cache
-        }
+    fun generateMoves(): List<Movement> {
         val generatedList = when (gameState()) {
             GameState.Placement -> {
                 generatePlacementMovements()
@@ -241,8 +210,6 @@ class Position(
                 generateRemovalMoves()
             }
         }
-        // store our work into our hashMap
-        Cache.addCache(this, generatedList, currentDepth)
         return generatedList
     }
 
@@ -346,7 +313,8 @@ class Position(
                         _____           _____           _____
                 _____                   _____                   _____
             ),
-            freePieces = Pair(${freeGreenPieces}u, ${freeBluePieces}u),
+            freeGreenPieces = ${freeGreenPieces}u,
+            freeBluePieces = ${freeBluePieces}u),
             pieceToMove = ${pieceToMove},
             removalCount = $removalCount
         )
@@ -396,7 +364,7 @@ class Position(
         repeat(24) {
             val newString = when (positions[it]) {
                 null -> "empty"
-                false -> "blue"
+                false -> "blue "
                 true -> "green"
             }
             str = str.replaceFirst("_____", newString)
@@ -423,26 +391,26 @@ class Position(
         // 3^29 = 68630377364883
         result += (freeGreenPieces.toInt() / 9 * 68630377364883)
         // 3^28 = 22876792454961
-        result += (freeGreenPieces.toInt() / 3 * 22876792454961)
+        result += (freeGreenPieces.toInt() % 9 / 3 * 22876792454961)
         // 3^27 = 7625597484987
         result += (freeGreenPieces.toInt() % 3 * 7625597484987)
 
         // 3^26 = 2541865828329
         result += (freeBluePieces.toInt() / 9 * 2541865828329)
         // 3^25 = 847288609443
-        result += (freeBluePieces.toInt() / 3 * 847288609443)
+        result += (freeBluePieces.toInt() % 9 / 3 * 847288609443)
         // 3^24 = 282429536481
         result += (freeBluePieces.toInt() % 3 * 282429536481)
 
         // 3^23 = 94143178827
-        var pow329 = 94143178827
+        var pow329 = 1
         positions.forEach {
             result += when (it) {
                 null -> 0
                 true -> 1
                 false -> 2
             } * pow329
-            pow329 /= 3
+            pow329 *= 3
         }
         if (pieceToMove) {
             result *= -1

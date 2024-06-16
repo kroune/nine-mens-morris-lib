@@ -18,13 +18,23 @@ class Movement(val startIndex: Int?, val endIndex: Int?) {
     fun producePosition(pos: Position): Position {
         val copy = pos.copy()
         if (endIndex != null) {
+            if (copy.positions[endIndex] == copy.pieceToMove) {
+                error("illegal move $this $pos")
+            }
             // this happens either when we move a piece or place it
             copy.positions[endIndex] = copy.pieceToMove
         } else {
             // this happens only when we remove smth
             if (copy.positions[startIndex!!]!!) {
+                // if it is true, we remove green piece
+                if (copy.greenPiecesAmount == 0.toUByte()) {
+                    error("illegal green piece count $this $pos")
+                }
                 copy.greenPiecesAmount--
             } else {
+                if (copy.bluePiecesAmount == 0.toUByte()) {
+                    error("illegal green piece count $this $pos")
+                }
                 copy.bluePiecesAmount--
             }
         }
@@ -36,7 +46,14 @@ class Movement(val startIndex: Int?, val endIndex: Int?) {
                 copy.freeBluePieces--
             }
         } else {
+            if (copy.positions[startIndex] == null) {
+                error("illegal move $this $pos")
+            }
             copy.positions[startIndex] = null
+        }
+        if (copy.removalCount > 1) {
+            copy.removalCount--
+            return copy
         }
         copy.removalCount = copy.removalAmount(this)
         if (copy.removalCount == 0.toByte()) {

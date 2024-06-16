@@ -1,6 +1,5 @@
 package com.kr8ne.mensMorris
 
-import com.kr8ne.mensMorris.cache.Cache
 import com.kr8ne.mensMorris.positions.Strategy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,10 +29,5 @@ class StrategyTests : Strategy() {
     fun `winning test4`() {
         val ourResult = position4.solve(2u)
         assertEquals(ourResult, correctResult4)
-    }
-
-    @AfterEach
-    fun clearCache() {
-        Cache.wipeCache()
     }
 }

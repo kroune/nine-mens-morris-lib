@@ -1,8 +1,6 @@
 package com.kr8ne.mensMorris
 
-import com.kr8ne.mensMorris.cache.Cache
 import com.kr8ne.mensMorris.positions.MoveGeneration
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -36,10 +34,5 @@ class MoveGenerationTest : MoveGeneration() {
     @Test
     fun `generate 6`() {
         assertEquals(position6.generateMoves(), position6Result)
-    }
-
-    @AfterEach
-    fun clearCache() {
-        Cache.wipeCache()
     }
 }
