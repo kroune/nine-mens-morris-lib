@@ -2,7 +2,6 @@ package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Benchmark
 import org.junit.jupiter.api.RepeatedTest
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 import kotlin.system.measureTimeMillis
 
 @Suppress("unused")

@@ -2,7 +2,6 @@ package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Memory
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 
 @Suppress("unused")
 class MemoryTest : Memory() {
