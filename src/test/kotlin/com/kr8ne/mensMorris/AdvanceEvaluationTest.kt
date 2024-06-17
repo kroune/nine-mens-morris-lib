@@ -8,21 +8,21 @@ import org.junit.jupiter.api.Test
 class AdvanceEvaluationTest : AdvanceEvaluation() {
     @Test
     fun greenWinning1() {
-        assertEquals(greenWinning1.evaluate(), Pair(195, -595))
+        assertEquals(greenWinning1.evaluate(), 195)
     }
 
     @Test
     fun draw1() {
-        assertEquals(draw1.evaluate(), Pair(0, 0))
+        assertEquals(draw1.evaluate(), 0)
     }
 
     @Test
     fun blueWinning1() {
-        assertEquals(blueWinning1.evaluate(), Pair(-20405, 19605))
+        assertEquals(blueWinning1.evaluate(), 20005)
     }
 
     @Test
     fun blueWinning2() {
-        assertEquals(blueWinning2.evaluate(), Pair(-20000, 20000))
+        assertEquals(blueWinning2.evaluate(), -20000)
     }
 }

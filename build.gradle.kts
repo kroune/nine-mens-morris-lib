@@ -32,7 +32,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.kroune"
-            artifactId = "nine-mens-morris"
+            artifactId = "nine-mens-morris-lib"
             version = "1.0.0"
 
             from(components["java"])

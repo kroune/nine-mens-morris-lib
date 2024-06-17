@@ -31,10 +31,18 @@ const val POSSIBLE_TRIPLE_COST = 5
 const val PIECES_TO_FLY: UByte = 3U
 
 /**
- * a constant for lost games
- * we need it to be not INT.MIN_VALUE because we still want the least worst lost positions
+ * evaluation of a won game
+ * NOTE: it can't be too big, or it may cause int overflow
+ * @see Position.evaluate
  */
-const val LOST_GAME_COST = -2_147_483_648 + 1_000_000
+const val WON_GAME_COST = 1_000_000_000
+
+/**
+ * evaluation of a lost game
+ * NOTE: it can't be too big, or it may cause int overflow
+ * @see Position.evaluate
+ */
+const val LOST_GAME_COST = -1_000_000_000
 
 /**
  * fast, readable way for creating green piece
@@ -69,6 +77,6 @@ val gameStartPosition: Position
                 EMPTY,                  EMPTY,                  EMPTY
             ),
             // @formatter:on
-            8u, 8u, pieceToMove = true
+            9u, 9u, pieceToMove = true
         )
     }

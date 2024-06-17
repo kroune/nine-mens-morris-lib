@@ -64,6 +64,6 @@ open class AdvanceEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        5u, 5u, pieceToMove = false
+        5u, 5u, pieceToMove = true
     )
 }

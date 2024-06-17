@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test
 class GameStateTest : GameStateTestData() {
     @Test
     fun `game state test 1`() {
-        assertEquals(position.gameState(), GameState.Normal)
+        assertEquals(position1.gameState(), GameState.Normal)
+    }
+
+    @Test
+    fun `game state test 2`() {
+        assertEquals(position2.gameState(), GameState.Flying)
     }
 }

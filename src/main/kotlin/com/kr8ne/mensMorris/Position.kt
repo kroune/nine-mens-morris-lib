@@ -30,43 +30,47 @@ class Position(
 ) {
     /**
      * evaluates position
-     * @return pair, where first is eval. for green and the second one for blue
+     * @return advantage of the currently moving player
      */
-    fun evaluate(depth: UByte = 0u): Pair<Int, Int> {
-        if (greenPiecesAmount < PIECES_TO_FLY) {
-            val depthCost = depth.toInt() * DEPTH_COST
-            return Pair(LOST_GAME_COST + depthCost, Int.MAX_VALUE - depthCost)
-        }
-        if (bluePiecesAmount < PIECES_TO_FLY) {
-            val depthCost = depth.toInt() * DEPTH_COST
-            return Pair(Int.MAX_VALUE - depthCost, LOST_GAME_COST + depthCost)
-        }
+    fun evaluate(depth: UByte = 0u): Int {
         var greenEvaluation = 0
         var blueEvaluation = 0
+        run {
+            if (greenPiecesAmount < PIECES_TO_FLY) {
+                val depthCost = depth.toInt() * DEPTH_COST
+                greenEvaluation = LOST_GAME_COST + depthCost
+                blueEvaluation = WON_GAME_COST - depthCost
+                return@run
+            }
+            if (bluePiecesAmount < PIECES_TO_FLY) {
+                val depthCost = depth.toInt() * DEPTH_COST
+                greenEvaluation = WON_GAME_COST - depthCost
+                blueEvaluation = LOST_GAME_COST + depthCost
+                return@run
+            }
 
-        val greenPieces = (greenPiecesAmount.toInt() + if (pieceToMove) removalCount.toInt() else 0)
-        val bluePieces = (bluePiecesAmount.toInt() + if (!pieceToMove) removalCount.toInt() else 0)
+            greenEvaluation += (greenPiecesAmount.toInt() + if (pieceToMove) removalCount.toInt() else 0) * PIECE_COST
+            blueEvaluation += (bluePiecesAmount.toInt() + if (!pieceToMove) removalCount.toInt() else 0) * PIECE_COST
 
-        val deltaPieces = (greenPieces - bluePieces)
-        greenEvaluation += deltaPieces * PIECE_COST
-        blueEvaluation -= deltaPieces * PIECE_COST
+            val (unfinishedTriples, findBlockedTriples) = triplesEvaluation()
 
-        val (unfinishedTriples, findBlockedTriples) = triplesEvaluation()
+            val unfinishedTriplesMultiplier = if (pieceToMove) {
+                UNFINISHED_TRIPLES_COST
+            } else {
+                ENEMY_UNFINISHED_TRIPLES_COST
+            }
+            greenEvaluation += unfinishedTriples.first * unfinishedTriplesMultiplier
+            blueEvaluation += unfinishedTriples.second * unfinishedTriplesMultiplier
 
-        val greenUnfinishedTriplesDelta =
-            (unfinishedTriples.first - unfinishedTriples.second * ENEMY_UNFINISHED_TRIPLES_COST)
-        greenEvaluation += greenUnfinishedTriplesDelta * UNFINISHED_TRIPLES_COST
 
-
-        val blueUnfinishedTriplesDelta =
-            (unfinishedTriples.second - unfinishedTriples.first * ENEMY_UNFINISHED_TRIPLES_COST)
-        blueEvaluation += blueUnfinishedTriplesDelta * UNFINISHED_TRIPLES_COST
-
-        val deltaBlockedTriples = (findBlockedTriples.first - findBlockedTriples.second) * POSSIBLE_TRIPLE_COST
-        greenEvaluation += deltaBlockedTriples
-        blueEvaluation -= deltaBlockedTriples
-
-        return Pair(greenEvaluation, blueEvaluation)
+            greenEvaluation += findBlockedTriples.first * POSSIBLE_TRIPLE_COST
+            blueEvaluation += findBlockedTriples.second * POSSIBLE_TRIPLE_COST
+        }
+        return if (pieceToMove) {
+            greenEvaluation - blueEvaluation
+        } else {
+            blueEvaluation - greenEvaluation
+        }
     }
 
     /**
@@ -121,21 +125,22 @@ class Position(
 
     /**
      * @param depth current depth
+     * @param maximize if we should maximize evaluation
      * @color color of the piece we are finding a move for
      * @return possible positions and there evaluation
      */
     fun solve(
-        depth: UByte
-    ): Pair<Pair<Int, Int>, MutableList<Movement>> {
+        depth: UByte, maximize: Boolean = true
+    ): Pair<Int, MutableList<Movement>> {
         if (depth == 0.toUByte() || gameEnded()) {
             return Pair(evaluate(depth), mutableListOf())
         }
         // for all possible positions, we try to solve them
-        val positions: MutableList<Pair<Pair<Int, Int>, MutableList<Movement>>> = mutableListOf()
+        val positions: MutableList<Pair<Int, MutableList<Movement>>> = mutableListOf()
         generateMoves().forEach {
             val pos = it.producePosition(this)
             val shouldNotDecreaseDepth = (pos.removalCount > 0 && !gameEnded())
-            val result = pos.solve((depth - if (shouldNotDecreaseDepth) 0u else 1u).toUByte())
+            val result = pos.solve((depth - if (shouldNotDecreaseDepth) 0u else 1u).toUByte(), !maximize)
             if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
                 // it means we don't have any valid move, so we lost
                 return@forEach
@@ -145,16 +150,13 @@ class Position(
         }
         if (positions.isEmpty()) {
             // if we can't make a move, we lose
+            val depthCost = depth.toInt() * DEPTH_COST
             return Pair(
-                if (!pieceToMove) {
-                    Pair(LOST_GAME_COST, Int.MAX_VALUE)
-                } else {
-                    Pair(Int.MAX_VALUE, LOST_GAME_COST)
-                }, mutableListOf()
+                LOST_GAME_COST + depthCost - WON_GAME_COST, mutableListOf()
             )
         }
         return positions.maxBy {
-            if (pieceToMove) it.first.first else it.first.second
+            it.first * if (!maximize) 1 else -1
         }
     }
 
@@ -271,7 +273,7 @@ class Position(
     }
 
     /**
-     * @return state of the game
+     * @return state of the game for the currently playing moves
      */
     fun gameState(): GameState {
         return when {
@@ -314,7 +316,7 @@ class Position(
                 _____                   _____                   _____
             ),
             freeGreenPieces = ${freeGreenPieces}u,
-            freeBluePieces = ${freeBluePieces}u),
+            freeBluePieces = ${freeBluePieces}u,
             pieceToMove = ${pieceToMove},
             removalCount = $removalCount
         )

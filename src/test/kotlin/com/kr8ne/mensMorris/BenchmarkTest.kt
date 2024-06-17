@@ -1,12 +1,14 @@
 package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Benchmark
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.RepeatedTest
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 import kotlin.system.measureTimeMillis
 
 @Suppress("unused")
 class BenchmarkTest : Benchmark() {
+    // this test takes more time and not very useful most of the time
+    @EnabledIfEnvironmentVariable(named = "FULL_TEST", matches = true.toString())
     @RepeatedTest(10)
     fun benchmark() {
         val time = measureTimeMillis {

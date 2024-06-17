@@ -23,7 +23,7 @@ open class Strategy {
     )
 
     val correctResult1 = Pair(
-        Pair(-2146483646, 2147483645), mutableListOf<Movement>()
+        -1999999996, mutableListOf<Movement>()
     )
 
     val position2 = Position(
@@ -42,7 +42,7 @@ open class Strategy {
     )
 
     val correctResult2 = Pair(
-        Pair(2147483646, -2146483647), mutableListOf(
+        -1999999998, mutableListOf(
             Movement(0, null),
             Movement(null, 18)
         )
@@ -64,7 +64,7 @@ open class Strategy {
     )
 
     val correctResult3 = Pair(
-        Pair(-10000, 10000), mutableListOf(
+        10000, mutableListOf(
             Movement(null, 0),
             Movement(null, 7)
         )
@@ -86,9 +86,32 @@ open class Strategy {
     )
 
     val correctResult4 = Pair(
-        Pair(-2146483647, 2147483646), mutableListOf(
+        -1999999998, mutableListOf(
             Movement(12, null),
             Movement(0, 1)
+        )
+    )
+
+    val position5 = Position(
+        // @formatter:off
+        arrayOf(
+            BLUE_,                  EMPTY,                  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+            EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+            GREEN,                  EMPTY,                  GREEN
+        ),
+        // @formatter:on
+        6u, 7u, pieceToMove = false, removalCount = 0
+    )
+
+    val correctResult5 = Pair(
+        5, mutableListOf(
+            Movement(null, 16),
+            Movement(null, 2),
+            Movement(null, 22)
         )
     )
 

@@ -33,7 +33,7 @@ open class BasicEvaluation {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        0u, 1u, pieceToMove = true
+        0u, 1u, pieceToMove = false
     )
 
     val blueWinning3 = Position(

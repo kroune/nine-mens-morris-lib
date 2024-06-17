@@ -1,7 +1,6 @@
 package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Strategy
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -29,5 +28,11 @@ class StrategyTests : Strategy() {
     fun `winning test4`() {
         val ourResult = position4.solve(2u)
         assertEquals(ourResult, correctResult4)
+    }
+
+    @Test
+    fun `winning test5`() {
+        val ourResult = position5.solve(3u)
+        assertEquals(ourResult, correctResult5)
     }
 }

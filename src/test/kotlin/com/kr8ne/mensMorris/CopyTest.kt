@@ -1,7 +1,6 @@
 package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Copy
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 

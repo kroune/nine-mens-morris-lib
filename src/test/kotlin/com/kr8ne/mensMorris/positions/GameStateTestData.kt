@@ -6,7 +6,7 @@ import com.kr8ne.mensMorris.GREEN
 import com.kr8ne.mensMorris.Position
 
 open class GameStateTestData {
-    val position = Position(
+    val position1 = Position(
         // @formatter:off
         arrayOf(
             EMPTY,                  BLUE_,                  EMPTY,
@@ -16,6 +16,21 @@ open class GameStateTestData {
                             GREEN,  EMPTY,  GREEN,
                     EMPTY,          GREEN,          EMPTY,
             EMPTY,                  EMPTY,                  EMPTY
+        ),
+        // @formatter:on
+        pieceToMove = true
+    )
+
+    val position2 = Position(
+        // @formatter:off
+        arrayOf(
+            BLUE_,                  EMPTY,                  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+                            BLUE_,  EMPTY,  EMPTY,
+            EMPTY,  EMPTY,  BLUE_,          GREEN,  GREEN,  EMPTY,
+                            BLUE_,  EMPTY,  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+            EMPTY,                  BLUE_,                  GREEN
         ),
         // @formatter:on
         pieceToMove = true
