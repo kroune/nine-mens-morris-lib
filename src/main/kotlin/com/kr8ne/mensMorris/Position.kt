@@ -54,13 +54,8 @@ class Position(
 
             val (unfinishedTriples, findBlockedTriples) = triplesEvaluation()
 
-            val unfinishedTriplesMultiplier = if (pieceToMove) {
-                UNFINISHED_TRIPLES_COST
-            } else {
-                ENEMY_UNFINISHED_TRIPLES_COST
-            }
-            greenEvaluation += unfinishedTriples.first * unfinishedTriplesMultiplier
-            blueEvaluation += unfinishedTriples.second * unfinishedTriplesMultiplier
+            greenEvaluation += unfinishedTriples.first * if (pieceToMove) UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
+            blueEvaluation += unfinishedTriples.second * if (!pieceToMove) UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
 
 
             greenEvaluation += findBlockedTriples.first * POSSIBLE_TRIPLE_COST
@@ -74,7 +69,8 @@ class Position(
     }
 
     /**
-     * @return pair of unfinished triples and blocked triples
+     * @return pair of unfinished triples (2 pieces of the same color and 1 empty)
+     * and blocked triples (2 pieces of the same color and 1 of another)
      */
     fun triplesEvaluation(): Pair<Pair<Int, Int>, Pair<Int, Int>> {
         var greenUnfinishedTriples = 0
