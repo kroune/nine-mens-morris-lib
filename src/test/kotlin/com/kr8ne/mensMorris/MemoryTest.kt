@@ -9,7 +9,6 @@ class MemoryTest : Memory() {
     /**
      * @throws OutOfMemoryError if failed
      */
-    @EnabledIfEnvironmentVariable(named = "FULL_TEST", matches = true.toString())
     @Test
     fun `depth test`() {
         wonPosition.solve(5u).second

@@ -8,7 +8,6 @@ import kotlin.system.measureTimeMillis
 @Suppress("unused")
 class BenchmarkTest : Benchmark() {
     // this test takes more time and not very useful most of the time
-    @EnabledIfEnvironmentVariable(named = "FULL_TEST", matches = true.toString())
     @RepeatedTest(10)
     fun benchmark() {
         val time = measureTimeMillis {

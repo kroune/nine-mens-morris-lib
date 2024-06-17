@@ -107,13 +107,41 @@ open class Strategy {
         6u, 7u, pieceToMove = false, removalCount = 0
     )
 
-    val correctResult5 = Pair(
-        5, mutableListOf(
-            Movement(null, 16),
-            Movement(null, 2),
-            Movement(null, 22)
-        )
+    val correctResult5 = Movement(null, 22)
+
+    val position6 = Position(
+        // @formatter:off
+        arrayOf(
+            BLUE_,                  EMPTY,                  EMPTY,
+                    BLUE_,          EMPTY,          EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+            EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+            GREEN,                  EMPTY,                  GREEN
+        ),
+        // @formatter:on
+        6u, 6u, pieceToMove = true, removalCount = 0
     )
+
+    val correctResult6 = Movement(null, 22)
+
+    val position7 = Position(
+        // @formatter:off
+        arrayOf(
+            BLUE_,                  EMPTY,                  EMPTY,
+                    BLUE_,          EMPTY,          EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+            EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
+                            EMPTY,  EMPTY,  EMPTY,
+                    EMPTY,          EMPTY,          EMPTY,
+            GREEN,                  GREEN,                  GREEN
+        ),
+        // @formatter:on
+        6u, 6u, pieceToMove = true, removalCount = 1
+    )
+
+    val correctResult7 = Movement(null, 22)
 
     /*
     0-----------------1-----------------2

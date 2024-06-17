@@ -136,7 +136,11 @@ class Position(
         generateMoves().forEach {
             val pos = it.producePosition(this)
             val shouldNotDecreaseDepth = (pos.removalCount > 0 && !gameEnded())
-            val result = pos.solve((depth - if (shouldNotDecreaseDepth) 0u else 1u).toUByte(), !maximize)
+            val result = if (shouldNotDecreaseDepth) {
+                pos.solve(depth, maximize)
+            } else {
+                pos.solve((depth - 1u).toUByte(), !maximize)
+            }
             if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
                 // it means we don't have any valid move, so we lost
                 return@forEach
