@@ -5,6 +5,8 @@ import com.kr8ne.mensMorris.move.moveProvider
 import com.kr8ne.mensMorris.move.removeChecker
 import com.kr8ne.mensMorris.move.triplesMap
 import kotlinx.serialization.Serializable
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * used for storing position data
@@ -120,48 +122,60 @@ class Position(
         return greenPiecesAmount < PIECES_TO_FLY || bluePiecesAmount < PIECES_TO_FLY
     }
 
-    /**
-     * @param depth current depth
-     * @color color of the piece we are finding a move for
-     * @return possible positions and there evaluation
-     */
-    fun solve(
+    private fun analyze(
         depth: UByte
-    ): Pair<Int, MutableList<Movement>> {
+    ): Int {
         if (depth == 0.toUByte() || gameEnded()) {
-            return Pair(evaluate(depth), mutableListOf())
+            return evaluate(depth)
         }
         Cache.getCache(this, depth)?.let {
             return it
         }
         // for all possible positions, we try to solve them
-        val positions: MutableList<Pair<Int, MutableList<Movement>>> = mutableListOf()
+        val depthCost = depth.toInt() * DEPTH_COST
+        // this assumes evaluation is > Int.MIN_VALUE and < Int.MAX_VALUE
+        val defaultValue = if (pieceToMove) Int.MIN_VALUE else Int.MAX_VALUE
+        var bestEvaluation: Int = defaultValue
         generateMoves().forEach {
             val pos = it.producePosition(this)
             val shouldNotDecreaseDepth = (pos.removalCount > 0u && !gameEnded())
             val result = if (shouldNotDecreaseDepth) {
-                pos.solve(depth)
+                pos.analyze(depth)
             } else {
-                pos.solve((depth - 1u).toUByte())
+                pos.analyze((depth - 1u).toUByte())
             }
-            if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
-                // it means we don't have any valid move, so we lost
-                return@forEach
-            }
-            result.second.add(it)
-            positions.add(result)
-        }
-        val result: Pair<Int, MutableList<Movement>> = if (positions.isEmpty()) {
-            // if we can't make a move, we lose
-            val depthCost = depth.toInt() * DEPTH_COST
-            Pair(LOST_GAME_COST + depthCost - WON_GAME_COST, mutableListOf())
-        } else {
-            positions.maxBy {
-                it.first * if (pieceToMove) 1 else -1
+            bestEvaluation = if (pieceToMove) {
+                max(result, bestEvaluation)
+            } else {
+                min(result, bestEvaluation)
             }
         }
-        Cache.addCache(this, depth, result)
-        return result
+        // it means that we can't make any move, so we lost
+        if (bestEvaluation == defaultValue) {
+            bestEvaluation = LOST_GAME_COST + depthCost - WON_GAME_COST
+        }
+        Cache.addCache(this, depth, bestEvaluation)
+        return bestEvaluation
+    }
+
+    /**
+     * @param depth current depth
+     * @color color of the piece we are finding a move for
+     * @return possible positions and there evaluation
+     */
+    fun findBestMove(
+        depth: UByte
+    ): Movement? {
+        // for all possible positions, we try to analyze them
+        val positions: MutableList<Pair<Int, Movement>> = mutableListOf()
+        generateMoves().forEach {
+            val pos = it.producePosition(this)
+            val evaluation = pos.analyze((depth - 1u).toUByte())
+            positions.add(Pair(evaluation, it))
+        }
+        return positions.maxByOrNull {
+            if (pieceToMove) it.first else -it.first
+        }?.second
     }
 
     /**
@@ -183,12 +197,12 @@ class Position(
      * @param move the last move we have performed
      * @return the amount of removes we need to perform
      */
-    fun removalAmount(move: Movement): Byte {
-        if (move.endIndex == null) return 0
+    fun removalAmount(move: Movement): UByte {
+        if (move.endIndex == null) return 0u
 
         return removeChecker[move.endIndex].count { list ->
             list.all { positions[it] == pieceToMove }
-        }.toByte()
+        }.toUByte()
     }
 
     /**

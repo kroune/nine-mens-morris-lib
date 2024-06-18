@@ -37,12 +37,13 @@ and second one is winning move sequence (note: the first move is the last one in
 
 
 **Project progress**
-1. [ ] write unit tests
-2. [ ] use code style analyser
-3. [ ] create a better hash function
-4. [ ] reuse piece count data
-5. [ ] reuse hash calculations
-6. [ ] implement NNUE for position evaluation
-7. [ ] create a table base of all possible moves
-8. [ ] implement alpha-beta pruning (and move ordering)
-9. [ ] reuse possible moves generation
+1. [x] write unit tests
+2. [x] use code style analyser
+3. [x] create a better hash function
+4. [x] reuse piece count data
+5. [x] create transposition hash map
+6. [ ] reuse hash calculations
+7. [ ] implement NNUE position evaluation
+8. [ ] create a table base of all possible moves (since there isn't as many positions as in chess)
+9. [ ] implement alpha-beta pruning (and move ordering)
+10. [ ] reuse possible moves generation

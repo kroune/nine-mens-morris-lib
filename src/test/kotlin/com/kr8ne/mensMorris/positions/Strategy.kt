@@ -19,12 +19,10 @@ open class Strategy {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        0u, 0u, pieceToMove = true, removalCount = 0
+        0u, 0u, pieceToMove = true, removalCount = 0u
     )
 
-    val correctResult1 = Pair(
-        -1999999996, mutableListOf<Movement>()
-    )
+    val correctResult1 = null
 
     val position2 = Position(
         // @formatter:off
@@ -38,15 +36,10 @@ open class Strategy {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        1u, 1u, pieceToMove = true, removalCount = 0
+        1u, 1u, pieceToMove = true, removalCount = 0u
     )
 
-    val correctResult2 = Pair(
-        1999999998, mutableListOf(
-            Movement(0, null),
-            Movement(null, 18)
-        )
-    )
+    val correctResult2 = Movement(null, 18)
 
     val position3 = Position(
         // @formatter:off
@@ -60,15 +53,10 @@ open class Strategy {
             EMPTY,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        5u, 5u, pieceToMove = false, removalCount = 0
+        5u, 5u, pieceToMove = false, removalCount = 0u
     )
 
-    val correctResult3 = Pair(
-        -10000, mutableListOf(
-            Movement(null, 0),
-            Movement(null, 7)
-        )
-    )
+    val correctResult3 = Movement(null, 7)
 
     val position4 = Position(
         // @formatter:off
@@ -82,15 +70,10 @@ open class Strategy {
             BLUE_,                  EMPTY,                  EMPTY
         ),
         // @formatter:on
-        0u, 0u, pieceToMove = false, removalCount = 0
+        0u, 0u, pieceToMove = false, removalCount = 0u
     )
 
-    val correctResult4 = Pair(
-        -1999999998, mutableListOf(
-            Movement(12, null),
-            Movement(0, 1)
-        )
-    )
+    val correctResult4 = Movement(0, 1)
 
     val position5 = Position(
         // @formatter:off
@@ -104,44 +87,10 @@ open class Strategy {
             GREEN,                  EMPTY,                  GREEN
         ),
         // @formatter:on
-        6u, 7u, pieceToMove = false, removalCount = 0
+        6u, 7u, pieceToMove = false, removalCount = 0u
     )
 
     val correctResult5 = Movement(null, 22)
-
-    val position6 = Position(
-        // @formatter:off
-        arrayOf(
-            BLUE_,                  EMPTY,                  EMPTY,
-                    BLUE_,          EMPTY,          EMPTY,
-                            EMPTY,  EMPTY,  EMPTY,
-            EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
-                            EMPTY,  EMPTY,  EMPTY,
-                    EMPTY,          EMPTY,          EMPTY,
-            GREEN,                  EMPTY,                  GREEN
-        ),
-        // @formatter:on
-        6u, 6u, pieceToMove = true, removalCount = 0
-    )
-
-    val correctResult6 = Movement(null, 22)
-
-    val position7 = Position(
-        // @formatter:off
-        arrayOf(
-            BLUE_,                  EMPTY,                  EMPTY,
-                    BLUE_,          EMPTY,          EMPTY,
-                            EMPTY,  EMPTY,  EMPTY,
-            EMPTY,  EMPTY,  EMPTY,          EMPTY,  EMPTY,  EMPTY,
-                            EMPTY,  EMPTY,  EMPTY,
-                    EMPTY,          EMPTY,          EMPTY,
-            GREEN,                  GREEN,                  GREEN
-        ),
-        // @formatter:on
-        6u, 6u, pieceToMove = true, removalCount = 1
-    )
-
-    val correctResult7 = Movement(null, 22)
 
     /*
     0-----------------1-----------------2

@@ -8,31 +8,31 @@ import org.junit.jupiter.api.Test
 class StrategyTests : Strategy() {
     @Test
     fun `winning test1`() {
-        val ourResult = position1.solve(2u)
+        val ourResult = position1.findBestMove(2u)
         assertEquals(ourResult, correctResult1)
     }
 
     @Test
     fun `winning test2`() {
-        val ourResult = position2.solve(2u)
+        val ourResult = position2.findBestMove(2u)
         assertEquals(ourResult, correctResult2)
     }
 
     @Test
     fun `winning test3`() {
-        val ourResult = position3.solve(2u)
+        val ourResult = position3.findBestMove(2u)
         assertEquals(ourResult, correctResult3)
     }
 
     @Test
     fun `winning test4`() {
-        val ourResult = position4.solve(2u)
+        val ourResult = position4.findBestMove(2u)
         assertEquals(ourResult, correctResult4)
     }
 
     @Test
     fun `winning test5`() {
-        val ourResult = position5.solve(4u)
-        assertEquals(ourResult.second.last(), correctResult5)
+        val ourResult = position5.findBestMove(4u)
+        assertEquals(ourResult, correctResult5)
     }
 }

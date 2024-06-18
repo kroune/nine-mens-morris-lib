@@ -11,7 +11,7 @@ class BenchmarkTest : Benchmark() {
     @RepeatedTest(10)
     fun benchmark() {
         val time = measureTimeMillis {
-            benchmark1.solve(6u)
+            benchmark1.findBestMove(6u)
         }
         // TODO: replace with JMH tests
         println(time)
@@ -33,7 +33,7 @@ class BenchmarkTest : Benchmark() {
     @RepeatedTest(10)
     fun benchmark2() {
         val time = measureTimeMillis {
-            benchmark2.solve(4u)
+            benchmark2.findBestMove(4u)
         }
         // TODO: replace with JMH tests
         println(time)

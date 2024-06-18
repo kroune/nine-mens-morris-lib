@@ -51,11 +51,11 @@ class Movement(val startIndex: Int?, val endIndex: Int?) {
             }
             copy.positions[startIndex] = null
         }
-        if (copy.removalCount > 1) {
+        if (copy.removalCount > 1u) {
             copy.removalCount--
         } else {
             copy.removalCount = copy.removalAmount(this)
-            if (copy.removalCount == 0.toByte()) {
+            if (copy.removalCount == 0.toUByte()) {
                 copy.pieceToMove = !copy.pieceToMove
             }
         }

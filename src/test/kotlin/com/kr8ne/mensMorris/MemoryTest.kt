@@ -10,6 +10,6 @@ class MemoryTest : Memory() {
      */
     @Test
     fun `depth test`() {
-        wonPosition.solve(5u).second
+        wonPosition.findBestMove(5u)
     }
 }
