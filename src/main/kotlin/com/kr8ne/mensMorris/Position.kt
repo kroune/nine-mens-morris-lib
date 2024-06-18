@@ -122,22 +122,37 @@ class Position(
         return greenPiecesAmount < PIECES_TO_FLY || bluePiecesAmount < PIECES_TO_FLY
     }
 
+    /**
+     * actual minimax search
+     * we want to separate them, because it allows us to forget about storing move sequence,
+     * which greatly improves performance, more over, minimax gets less precise at the last moves (because it doesn't
+     * evaluate possible positions we can get from them enough), so there isn't any actual need to see al the sequence
+     */
     private fun analyze(
         depth: UByte
     ): Int {
         if (depth == 0.toUByte() || gameEnded()) {
             return evaluate(depth)
         }
+        // abort if this position was already analyzed
         Cache.getCache(this, depth)?.let {
             return it
         }
         // for all possible positions, we try to solve them
         val depthCost = depth.toInt() * DEPTH_COST
-        // this assumes evaluation is > Int.MIN_VALUE and < Int.MAX_VALUE
+        /**
+         * this assumes evaluation is > Int.MIN_VALUE and < Int.MAX_VALUE,
+         * it is better than using null as default value,
+         * because we don't want to check if it is null on every iteration
+         */
         val defaultValue = if (pieceToMove) Int.MIN_VALUE else Int.MAX_VALUE
         var bestEvaluation: Int = defaultValue
         generateMoves().forEach {
             val pos = it.producePosition(this)
+            /**
+             * if we can perform an additional move we don't need to decrease depth
+             * in order not to fuck up evaluation sorting
+             */
             val shouldNotDecreaseDepth = (pos.removalCount > 0u && !gameEnded())
             val result = if (shouldNotDecreaseDepth) {
                 pos.analyze(depth)
@@ -160,8 +175,7 @@ class Position(
 
     /**
      * @param depth current depth
-     * @color color of the piece we are finding a move for
-     * @return possible positions and there evaluation
+     * @return best move or null if none are possible
      */
     fun findBestMove(
         depth: UByte
@@ -173,6 +187,7 @@ class Position(
             val evaluation = pos.analyze((depth - 1u).toUByte())
             positions.add(Pair(evaluation, it))
         }
+        // now we simply sort them
         return positions.maxByOrNull {
             if (pieceToMove) it.first else -it.first
         }?.second
