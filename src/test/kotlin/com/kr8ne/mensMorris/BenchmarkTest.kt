@@ -1,6 +1,7 @@
 package com.kr8ne.mensMorris
 
 import com.kr8ne.mensMorris.positions.Benchmark
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.RepeatedTest
 import kotlin.system.measureTimeMillis
 
@@ -50,4 +51,9 @@ class BenchmarkTest : Benchmark() {
     1160
     1185
      */
+
+    @AfterEach
+    fun resetCache() {
+        Cache.wipeCache()
+    }
 }

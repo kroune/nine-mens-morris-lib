@@ -26,13 +26,14 @@ class Position(
     var greenPiecesAmount: UByte = ((positions.count { it == true }.toUByte() + freeGreenPieces).toUByte()),
     var bluePiecesAmount: UByte = (positions.count { it == false }.toUByte() + freeBluePieces).toUByte(),
     var pieceToMove: Boolean,
-    var removalCount: Byte = 0
+    var removalCount: UByte = 0u
 ) {
     /**
      * evaluates position
-     * @return advantage of the currently moving player
+     * @return advantage of the green player
      */
     fun evaluate(depth: UByte = 0u): Int {
+        // TODO: replace with NNUE
         var greenEvaluation = 0
         var blueEvaluation = 0
         run {
@@ -54,18 +55,16 @@ class Position(
 
             val (unfinishedTriples, findBlockedTriples) = triplesEvaluation()
 
-            greenEvaluation += unfinishedTriples.first * if (pieceToMove) UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
-            blueEvaluation += unfinishedTriples.second * if (!pieceToMove) UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
+            greenEvaluation += unfinishedTriples.first * if (pieceToMove)
+                UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
+            blueEvaluation += unfinishedTriples.second * if (!pieceToMove)
+                UNFINISHED_TRIPLES_COST else ENEMY_UNFINISHED_TRIPLES_COST
 
 
             greenEvaluation += findBlockedTriples.first * POSSIBLE_TRIPLE_COST
             blueEvaluation += findBlockedTriples.second * POSSIBLE_TRIPLE_COST
         }
-        return if (pieceToMove) {
-            greenEvaluation - blueEvaluation
-        } else {
-            blueEvaluation - greenEvaluation
-        }
+        return greenEvaluation - blueEvaluation
     }
 
     /**
@@ -113,6 +112,8 @@ class Position(
     }
 
     /**
+     * WARNING: we also lose if we can't make a move
+     * this function doesn't check this
      * @return true if the game has ended
      */
     private fun gameEnded(): Boolean {
@@ -121,25 +122,27 @@ class Position(
 
     /**
      * @param depth current depth
-     * @param maximize if we should maximize evaluation
      * @color color of the piece we are finding a move for
      * @return possible positions and there evaluation
      */
     fun solve(
-        depth: UByte, maximize: Boolean = true
+        depth: UByte
     ): Pair<Int, MutableList<Movement>> {
         if (depth == 0.toUByte() || gameEnded()) {
             return Pair(evaluate(depth), mutableListOf())
+        }
+        Cache.getCache(this, depth)?.let {
+            return it
         }
         // for all possible positions, we try to solve them
         val positions: MutableList<Pair<Int, MutableList<Movement>>> = mutableListOf()
         generateMoves().forEach {
             val pos = it.producePosition(this)
-            val shouldNotDecreaseDepth = (pos.removalCount > 0 && !gameEnded())
+            val shouldNotDecreaseDepth = (pos.removalCount > 0u && !gameEnded())
             val result = if (shouldNotDecreaseDepth) {
-                pos.solve(depth, maximize)
+                pos.solve(depth)
             } else {
-                pos.solve((depth - 1u).toUByte(), !maximize)
+                pos.solve((depth - 1u).toUByte())
             }
             if (depth != 1.toUByte() && result.second.isEmpty() && !pos.gameEnded()) {
                 // it means we don't have any valid move, so we lost
@@ -148,16 +151,17 @@ class Position(
             result.second.add(it)
             positions.add(result)
         }
-        if (positions.isEmpty()) {
+        val result: Pair<Int, MutableList<Movement>> = if (positions.isEmpty()) {
             // if we can't make a move, we lose
             val depthCost = depth.toInt() * DEPTH_COST
-            return Pair(
-                LOST_GAME_COST + depthCost - WON_GAME_COST, mutableListOf()
-            )
+            Pair(LOST_GAME_COST + depthCost - WON_GAME_COST, mutableListOf())
+        } else {
+            positions.maxBy {
+                it.first * if (pieceToMove) 1 else -1
+            }
         }
-        return positions.maxBy {
-            it.first * if (!maximize) 1 else -1
-        }
+        Cache.addCache(this, depth, result)
+        return result
     }
 
     /**
@@ -281,7 +285,7 @@ class Position(
                 GameState.End
             }
 
-            (removalCount > 0) -> {
+            (removalCount > 0u) -> {
                 GameState.Removing
             }
 
@@ -388,7 +392,7 @@ class Position(
     fun longHashCode(): Long {
         var result = 0L
         // 3^30 = 205891132094649
-        result += removalCount * 205891132094649
+        result += removalCount.toInt() * 205891132094649
 
         // 3^29 = 68630377364883
         result += (freeGreenPieces.toInt() / 9 * 68630377364883)

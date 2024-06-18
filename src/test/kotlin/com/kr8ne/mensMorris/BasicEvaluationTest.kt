@@ -8,22 +8,22 @@ import org.junit.jupiter.api.Test
 class BasicEvaluationTest : BasicEvaluation() {
     @Test
     fun greenWinning1() {
-        assertEquals(greenWinning1.evaluate(), -2000000000)
+        assertEquals(greenWinning1.evaluate(), 2000000000)
     }
 
     @Test
     fun greenWinning2() {
-        assertEquals(greenWinning2.evaluate(), -2000000000)
+        assertEquals(greenWinning2.evaluate(), 2000000000)
     }
 
     @Test
     fun greenWinning3() {
-        assertEquals(greenWinning3.evaluate(), -2000000000)
+        assertEquals(greenWinning3.evaluate(), 2000000000)
     }
 
     @Test
     fun greenWinning4() {
-        assertEquals(greenWinning4.evaluate(), -2000000000)
+        assertEquals(greenWinning4.evaluate(), 2000000000)
     }
 
 
@@ -34,7 +34,7 @@ class BasicEvaluationTest : BasicEvaluation() {
 
     @Test
     fun blueWinning2() {
-        assertEquals(blueWinning2.evaluate(), 2000000000)
+        assertEquals(blueWinning2.evaluate(), -2000000000)
     }
 
     @Test
