@@ -123,12 +123,16 @@ class Position(
     }
 
     /**
+     * this function is marked as [suspend] because it usually performs heavy operations
+     * doing this makes shooting oneself in the foot a bit harder
+     *
      * actual minimax search
      * we want to separate them, because it allows us to forget about storing move sequence,
      * which greatly improves performance, more over, minimax gets less precise at the last moves (because it doesn't
      * evaluate possible positions we can get from them enough), so there isn't any actual need to see al the sequence
      */
-    private fun analyze(
+    @Suppress("RedundantSuspendModifier")
+    private suspend fun analyze(
         depth: UByte
     ): Int {
         if (depth == 0.toUByte() || gameEnded()) {
@@ -177,7 +181,7 @@ class Position(
      * @param depth current depth
      * @return best move or null if none are possible
      */
-    fun findBestMove(
+    suspend fun findBestMove(
         depth: UByte
     ): Movement? {
         // for all possible positions, we try to analyze them
