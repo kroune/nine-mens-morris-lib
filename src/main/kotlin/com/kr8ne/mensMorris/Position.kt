@@ -131,8 +131,7 @@ class Position(
      * which greatly improves performance, more over, minimax gets less precise at the last moves (because it doesn't
      * evaluate possible positions we can get from them enough), so there isn't any actual need to see al the sequence
      */
-    @Suppress("RedundantSuspendModifier")
-    private suspend fun analyze(
+    private fun analyze(
         depth: UByte
     ): Int {
         if (depth == 0.toUByte() || gameEnded()) {
@@ -181,7 +180,7 @@ class Position(
      * @param depth current depth
      * @return best move or null if none are possible
      */
-    suspend fun findBestMove(
+    fun findBestMove(
         depth: UByte
     ): Movement? {
         // for all possible positions, we try to analyze them
