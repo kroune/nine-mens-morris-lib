@@ -1,9 +1,9 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.move.Movement
-import com.kr8ne.nineMensMorrisLib.move.moveProvider
-import com.kr8ne.nineMensMorrisLib.move.removeChecker
-import com.kr8ne.nineMensMorrisLib.move.triplesMap
+import com.kroune.nineMensMorrisLib.move.Movement
+import com.kroune.nineMensMorrisLib.move.moveProvider
+import com.kroune.nineMensMorrisLib.move.removeChecker
+import com.kroune.nineMensMorrisLib.move.triplesMap
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -138,7 +138,7 @@ class Position(
             return evaluate(depth)
         }
         // abort if this position was already analyzed
-        com.kroune.nineMensMorrisLib.Cache.getCache(this, depth)?.let {
+        Cache.getCache(this, depth)?.let {
             return it
         }
         // for all possible positions, we try to solve them
@@ -172,7 +172,7 @@ class Position(
         if (bestEvaluation == defaultValue) {
             bestEvaluation = LOST_GAME_COST + depthCost - WON_GAME_COST
         }
-        com.kroune.nineMensMorrisLib.Cache.addCache(this, depth, bestEvaluation)
+        Cache.addCache(this, depth, bestEvaluation)
         return bestEvaluation
     }
 

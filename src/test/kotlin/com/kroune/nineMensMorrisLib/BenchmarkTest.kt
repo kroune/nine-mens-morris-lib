@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.positions.Benchmark
+import com.kroune.nineMensMorrisLib.positions.Benchmark
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.RepeatedTest
 import kotlin.system.measureTimeMillis
@@ -54,6 +54,6 @@ class BenchmarkTest : Benchmark() {
 
     @AfterEach
     fun resetCache() {
-        com.kroune.nineMensMorrisLib.Cache.wipeCache()
+        Cache.wipeCache()
     }
 }

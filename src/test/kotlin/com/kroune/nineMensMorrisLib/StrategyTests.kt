@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.positions.Strategy
+import com.kroune.nineMensMorrisLib.positions.Strategy
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

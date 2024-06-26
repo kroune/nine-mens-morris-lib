@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.kroune.nineMensMorris"
+group = "com.kroune.nine-mens-morris-lib"
 version = "1.0.1"
 
 repositories {

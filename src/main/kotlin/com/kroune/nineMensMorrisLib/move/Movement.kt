@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib.move
 
-import com.kr8ne.nineMensMorrisLib.Position
+import com.kroune.nineMensMorrisLib.Position
 import kotlinx.serialization.Serializable
 
 /**

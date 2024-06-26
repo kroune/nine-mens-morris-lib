@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.positions.MoveGeneration
+import com.kroune.nineMensMorrisLib.positions.MoveGeneration
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

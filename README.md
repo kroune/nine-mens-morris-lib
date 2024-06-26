@@ -2,7 +2,7 @@
 
 #### All information and source code are provided AS-IS, without express or implied warranties.
 
-New game position is created using [position class](src/main/kotlin/com/kr8ne/mensMorris/Position.kt)
+New game position is created using [position class](src/main/kotlin/com/kroune/nineMensMorrisLib/Position.kt)
 
 ```kotlin
     val piecePlacements = arrayOf(

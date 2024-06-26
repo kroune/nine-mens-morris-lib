@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.positions.Memory
+import com.kroune.nineMensMorrisLib.positions.Memory
 import org.junit.jupiter.api.Test
 
 @Suppress("unused")

@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.positions.Equals
+import com.kroune.nineMensMorrisLib.positions.Equals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

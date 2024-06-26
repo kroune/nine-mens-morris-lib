@@ -1,9 +1,9 @@
 package com.kroune.nineMensMorrisLib.positions
 
-import com.kr8ne.nineMensMorrisLib.BLUE_
-import com.kr8ne.nineMensMorrisLib.EMPTY
-import com.kr8ne.nineMensMorrisLib.GREEN
-import com.kr8ne.nineMensMorrisLib.Position
+import com.kroune.nineMensMorrisLib.BLUE_
+import com.kroune.nineMensMorrisLib.EMPTY
+import com.kroune.nineMensMorrisLib.GREEN
+import com.kroune.nineMensMorrisLib.Position
 
 open class Memory {
     val wonPosition = Position(

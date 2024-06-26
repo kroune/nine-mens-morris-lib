@@ -1,6 +1,6 @@
 package com.kroune.nineMensMorrisLib
 
-import com.kr8ne.nineMensMorrisLib.move.Movement
+import com.kroune.nineMensMorrisLib.move.Movement
 
 /**
  * maps solving result (sequence of winning moves) to the final position
