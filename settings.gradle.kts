@@ -1,1 +1,1 @@
-rootProject.name = "nine-mens-morris-lib"
+rootProject.name = "nineMensMorrisLib"
