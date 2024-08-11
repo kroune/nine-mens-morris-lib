@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
 }
 
-group = "com.kroune.nineMensMorrisLib"
-version = "1.0.1"
+group = "com.kroune.nine-mens-morris-lib"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -32,7 +32,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.kroune"
-            artifactId = "nineMensMorrisLib"
+            artifactId = "nine-mens-morris-lib"
             version = "1.0.0"
 
             from(components["java"])
