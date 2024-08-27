@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,20 +31,20 @@ object Cache {
     /**
      * adds new cache if it didn't exist, or it had lower depth
      */
-    fun addCache(pos: com.kroune.nineMensMorrisLib.Position, depth: UByte, evaluation: Int) {
+    fun addCache(pos: Position, depth: UByte, evaluation: Int) {
         val hash = pos.longHashCode()
-        val cacheData = com.kroune.nineMensMorrisLib.Cache.localCache[hash]
+        val cacheData = localCache[hash]
         if (cacheData == null || cacheData.first < depth) {
-            com.kroune.nineMensMorrisLib.Cache.localCache[hash] = Pair(depth, evaluation)
+            localCache[hash] = Pair(depth, evaluation)
         }
     }
 
     /**
      * @returns cached result of position solving or null if no proper cache exists
      */
-    fun getCache(pos: com.kroune.nineMensMorrisLib.Position, neededDepth: UByte): Int? {
+    fun getCache(pos: Position, neededDepth: UByte): Int? {
         val hash = pos.longHashCode()
-        val cache = com.kroune.nineMensMorrisLib.Cache.localCache[hash]
+        val cache = localCache[hash]
         if (cache == null || cache.first < neededDepth) {
             return null
         }
@@ -56,6 +56,6 @@ object Cache {
      * cache doesn't need to be cleared
      */
     fun wipeCache() {
-        com.kroune.nineMensMorrisLib.Cache.localCache.clear()
+        localCache.clear()
     }
 }
